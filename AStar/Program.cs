@@ -10,7 +10,7 @@ namespace AStar
         private static Node initialState = new Node();
         private static Frontier initialFrontier = new Frontier();
 
-        public void Main()
+        public static void Main()
         {
             foreach (Board board in initialState.getBoard().makeAllMoves())
             {
