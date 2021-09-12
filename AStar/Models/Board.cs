@@ -7,16 +7,17 @@ namespace AStar.Models
 {
     class Board
     {
-        private static int[] board;
+        private int[] board;
 
         public Board()
         {
             randomBoard();
         }
 
-        public Board(int[] newBoard)
+        public Board(int[] setBoard)
         {
-            board = newBoard;
+            board = new int[9];
+            Array.Copy(setBoard, board, 9);
 
         }
 
@@ -25,31 +26,69 @@ namespace AStar.Models
             return board;
         }
 
+        /*private static void copyBoard(List<int> boardToCopy)
+        {
+            for (int i = 0; i < 9; i++) 
+            {
+                boardToCopy.Add(board[i]);
+            }
+
+        }*/
+
         public Board[] makeAllMoves()
         {
             int blankLoc = findBlank();
             Board[] moves = new Board[4];
-            moves[0] = makeMove(blankLoc, -1);
-            moves[1] = makeMove(blankLoc, 1);
-            moves[2] = makeMove(blankLoc, -3);
-            moves[3] = makeMove(blankLoc, 3);
+
+            Board leftMoveBoard = new Board(board);
+            if(leftMoveBoard.makeMove(blankLoc, -1))
+            {
+                moves[0] = leftMoveBoard;
+            }
+            
+
+            Board rightMoveBoard = new Board(board);
+            if(rightMoveBoard.makeMove(blankLoc, 1))
+            {
+                moves[1] = rightMoveBoard;
+            }
+            
+
+            Board upMoveBoard = new Board(board);
+            if(upMoveBoard.makeMove(blankLoc, -3))
+            {
+                moves[2] = upMoveBoard;
+            }
+
+            Board downMoveBoard = new Board(board);
+            if(downMoveBoard.makeMove(blankLoc, 3))
+            {
+                moves[3] = downMoveBoard;
+            }
+            
             return moves;
 
         }
 
-        private static Board makeMove(int blankLoc, int move)
+        private bool makeMove(int blankLoc, int move)
         {
-            int[] newBoard = board;
-            if ((blankLoc % 3 + move >= 0) && (blankLoc % 3 + move <= 8) && (blankLoc / 3 + move >= 0) && (blankLoc / 3 + move <= 2))
+            int left = -1;
+            int right = 1;
+            int up = -3;
+            int down = 3;
+            if ((move == left && blankLoc % 3 != 0) || 
+                (move == right && blankLoc % 3 != 2) || 
+                (move == up && blankLoc / 3 != 0) || 
+                (move == down && blankLoc / 3 != 2))
             {
-                newBoard[blankLoc] = newBoard[blankLoc + move];
-                newBoard[blankLoc + move] = 0;
-                return new Board(newBoard);
+                board[blankLoc] = board[blankLoc + move];
+                board[blankLoc + move] = 0;
+                return true;
             }
-            return null;
+            return false;
         }
 
-        private static int findBlank()
+        private int findBlank()
         {
             for (int i = 0; i < board.Count(); i++)
             {
@@ -61,25 +100,27 @@ namespace AStar.Models
             return 0;
         }
 
-        private static void randomBoard()
+        private void randomBoard()
         {
             Random rnd = new Random();
-            do
-            {
+            do{
                 board = new int[9];
+                List<int> nums = new List<int>();
+                for(int i = 0; i <9; i++)
+                {
+                    nums.Add(i);
+                }
                 for (int i = 0; i < 9; i++)
                 {
-                    int rand = rnd.Next(0, 9);
-                    while (board.Contains(rand))
-                    {
-                        rand = rnd.Next(0, 9);
-                    }
-                    board[i] = rand;
-                }
+                    int rand = rnd.Next(0, nums.Count());
+                    int value = nums[rand];
+                    board[i] = value;
+                    nums.Remove(value);
+                }        
             } while (getInvCount() % 2 != 0);
         }
 
-        private static int getInvCount()
+        private int getInvCount()
         {
             int inv_count = 0;
             for (int i = 0; i < 3 - 1; i++)

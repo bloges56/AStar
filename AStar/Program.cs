@@ -23,6 +23,7 @@ namespace AStar
             LinkedList<Node> path = new LinkedList<Node>();
             path.Append(initialState);
             List<Node> visited = new List<Node>();
+            visited.Add(initialState);
             if (search(initialFrontier, path, visited))
             {
                 Console.WriteLine("Solution Found!");
@@ -41,9 +42,9 @@ namespace AStar
                 return false;
             }
             Node current = frontier.getFrontier().Dequeue();
-            if (visited.Contains(current))
+            if (visited.Any(n => Enumerable.SequenceEqual(n.getBoard().getBoard(), current.getBoard().getBoard()) && n.getCost() == current.getCost()))
             {
-                return search(frontier, path, visited);
+                return false;
             }
             path.Append(current);
             if (current.getMisplacedTiles() == 0)
@@ -56,7 +57,7 @@ namespace AStar
                 if (board != null)
                 {
                     Node nodeToAdd = new Node(current.getCost() + 1, board);
-                    if (!visited.Contains(nodeToAdd))
+                    if (!visited.Any(n => Enumerable.SequenceEqual(n.getBoard().getBoard(), nodeToAdd.getBoard().getBoard()) && n.getCost() == nodeToAdd.getCost() ))
                     {
                         frontier.add(nodeToAdd);
                     }

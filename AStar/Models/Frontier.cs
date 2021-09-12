@@ -7,7 +7,7 @@ namespace AStar.Models
 {
     class Frontier
     {
-        Queue<Node> frontier;
+        private Queue<Node> frontier;
 
         public Frontier()
         {
