@@ -11,16 +11,30 @@ namespace AStar
 
         public static void Main()
         {
-            int[] costAtDepth = { -1, -1 };
-            int i = 0;
-            while (costAtDepth[0] == -1)
+            
+            HashSet<int[]> tracker = new HashSet<int[]>();
+            
+            for(int i = 0; i < 100; i++)
             {
-                costAtDepth = search();
-                i++;
+
+                int[] costAtDepth = search();
+                
+                if (tracker.Any(track => track[0] == costAtDepth[0]))
+                {
+                    int[] current = tracker.FirstOrDefault(track => track[0] == costAtDepth[0]);
+                    current[1]++;
+                    current[2] += costAtDepth[1];
+                }
+                else
+                {
+                    tracker.Add(new int[3] { costAtDepth[0], 1, costAtDepth[1] });
+                }
                 Console.WriteLine(i);
             }
-            Console.Write("depth:" + costAtDepth[0]);
-            Console.Write("cost:" + costAtDepth[1]);
+            foreach(int[] track in tracker)
+            {
+                Console.WriteLine("depth:" + track[0] + "amount" + track[1] + "total" + track[2]);
+            }
         }
 
 
@@ -39,7 +53,7 @@ namespace AStar
 
             HashSet<Node> visited = new HashSet<Node>();
             visited.Add(state);
-            while (frontier.getFrontier().Count() != 0 && visited.Count() <= 1500)
+            while (frontier.getFrontier().Count() != 0)
             {
                 Node next = frontier.getFrontier().Dequeue();
                 if (visited.Any(n => Enumerable.SequenceEqual(n.getBoard().getBoard(), next.getBoard().getBoard()) && n.getCost() == next.getCost()))
