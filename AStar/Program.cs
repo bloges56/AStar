@@ -7,62 +7,73 @@ namespace AStar
 {
     class Program
     {
-        private static Node initialState = new Node();
-        private static Frontier initialFrontier = new Frontier();
+
 
         public static void Main()
         {
-            foreach (Board board in initialState.getBoard().makeAllMoves())
+            
+            HashSet<int[]> tracker = new HashSet<int[]>();
+            
+            for(int i = 0; i < 100; i++)
             {
-                if (board != null)
-                {
-                    initialFrontier.add(new Node(1, board));
-                }
-            }
 
-            LinkedList<Node> path = new LinkedList<Node>();
-            path.Append(initialState);
-            List<Node> visited = new List<Node>();
-            if (search(initialFrontier, path, visited))
-            {
-                Console.WriteLine("Solution Found!");
+                int[] costAtDepth = search();
+                
+                if (tracker.Any(track => track[0] == costAtDepth[0]))
+                {
+                    int[] current = tracker.FirstOrDefault(track => track[0] == costAtDepth[0]);
+                    current[1]++;
+                    current[2] += costAtDepth[1];
+                }
+                else
+                {
+                    tracker.Add(new int[3] { costAtDepth[0], 1, costAtDepth[1] });
+                }
+                Console.WriteLine(i);
             }
-            else
+            foreach(int[] track in tracker)
             {
-                Console.WriteLine("Error");
+                Console.WriteLine("depth:" + track[0] + "amount" + track[1] + "total" + track[2]);
             }
         }
 
 
-        private static bool search(Frontier frontier, LinkedList<Node> path, List<Node> visited)
+
+        private static int[] search()
         {
-            if (frontier.getFrontier().Count() == 0)
-            {
-                return false;
-            }
-            Node current = frontier.getFrontier().Dequeue();
-            if (visited.Contains(current))
-            {
-                return search(frontier, path, visited);
-            }
-            path.Append(current);
-            if (current.getMisplacedTiles() == 0)
-            {
-                return true;
-            }
-            visited.Add(current);
-            foreach (Board board in current.getBoard().makeAllMoves())
+            Node state = new Node();
+            Frontier frontier = new Frontier();
+            foreach (Board board in state.getBoard().makeAllMoves())
             {
                 if (board != null)
                 {
-                    Node nodeToAdd = new Node(current.getCost() + 1, board);
-                    if (!visited.Contains(nodeToAdd))
+                    frontier.add(new Node(1, board));
+                }
+            }
+
+            HashSet<Node> visited = new HashSet<Node>();
+            visited.Add(state);
+            while (frontier.getFrontier().Count() != 0)
+            {
+                Node next = frontier.getFrontier().Dequeue();
+                if (visited.Any(n => Enumerable.SequenceEqual(n.getBoard().getBoard(), next.getBoard().getBoard()) && n.getCost() == next.getCost()))
+                {
+                    continue;
+                }
+                visited.Add(next);
+                if (next.getMisplacedTiles() == 0)
+                {
+                    return new int[] { next.getCost(), visited.Count() };
+                }
+                foreach (Board board in next.getBoard().makeAllMoves())
+                {
+                    if (board != null)
                     {
-                        frontier.add(nodeToAdd);
+                        frontier.add(new Node(next.getCost() + 1, board));
                     }
                 }
             }
-            return search(frontier, path, visited);
+            return new int[] { -1, -1 };
         }
     }
 }

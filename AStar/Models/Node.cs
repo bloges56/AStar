@@ -7,8 +7,8 @@ namespace AStar.Models
 {
     class Node
     {
-        private static Board board;
-        private static int cost;
+        private Board board;
+        private int cost;
 
         public Node()
         {
@@ -20,7 +20,7 @@ namespace AStar.Models
 
         public Node(int newCost, Board newBoard)
         {
-            board = newBoard;
+            board = new Board(newBoard.getBoard());
             cost = newCost;
         }
 
