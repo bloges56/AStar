@@ -14,7 +14,7 @@ namespace AStar
             
             HashSet<int[]> tracker = new HashSet<int[]>();
             
-            for(int i = 0; i < 100; i++)
+            for(int i = 0; i < 1200; i++)
             {
                 int[] costAtDepth = new int[] { -1, -1 };
                 while(costAtDepth[0] == -1)
@@ -35,7 +35,7 @@ namespace AStar
             }
             foreach(int[] track in tracker)
             {
-                Console.WriteLine("depth:" + track[0] + "average" + (1.0 * track[2]/ (1.0 * track[1])));
+                Console.WriteLine("depth:" + track[0] + "average" + (1.0 * track[2])/(1.0 * track[1]));
             }
         }
 
