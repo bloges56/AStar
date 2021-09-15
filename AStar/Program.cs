@@ -60,7 +60,7 @@ namespace AStar
 
             HashSet<Node> visited = new HashSet<Node>();
             visited.Add(state);
-            while (frontier.getFrontier().Count() != 0)
+            while (frontier.getFrontier().Count() != 0 && visited.Count() < 40000)
             {
                 Node next = frontier.getFrontier().Dequeue();
                 if (visited.Any(n => Enumerable.SequenceEqual(n.getBoard().getBoard(), next.getBoard().getBoard()) && n.getCost() == next.getCost()))
