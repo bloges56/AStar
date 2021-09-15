@@ -7,14 +7,14 @@ namespace AStar
 {
     class Program
     {
-
+        private static HashSet<Node> initialStates = new HashSet<Node>();
 
         public static void Main()
-        {
-            
+        {  
             HashSet<int[]> tracker = new HashSet<int[]>();
             
-            for(int i = 0; i < 1200; i++)
+
+            for(int i = 0; i < 100; i++)
             {
                 int[] costAtDepth = new int[] { -1, -1 };
                 while(costAtDepth[0] == -1)
@@ -44,6 +44,11 @@ namespace AStar
         private static int[] search()
         {
             Node state = new Node();
+            if(initialStates.Any(n => Enumerable.SequenceEqual(n.getBoard().getBoard(), state.getBoard().getBoard())))
+            {
+                return new int[] { -1, -1 };
+            }
+            initialStates.Add(state);
             Frontier frontier = new Frontier();
             foreach (Board board in state.getBoard().makeAllMoves())
             {
@@ -55,7 +60,7 @@ namespace AStar
 
             HashSet<Node> visited = new HashSet<Node>();
             visited.Add(state);
-            while (frontier.getFrontier().Count() != 0 && visited.Count() < 500)
+            while (frontier.getFrontier().Count() != 0)
             {
                 Node next = frontier.getFrontier().Dequeue();
                 if (visited.Any(n => Enumerable.SequenceEqual(n.getBoard().getBoard(), next.getBoard().getBoard()) && n.getCost() == next.getCost()))
