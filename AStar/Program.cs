@@ -68,7 +68,7 @@ namespace AStar
                     continue;
                 }
                 visited.Add(next);
-                Console.Write(visited.Count());
+                Console.Write("\r{0}", visited.Count());
                 if (next.getMisplacedTiles() == 0)
                 {
                     return new int[] { next.getCost(), visited.Count() };
