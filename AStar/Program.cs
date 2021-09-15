@@ -16,9 +16,11 @@ namespace AStar
             
             for(int i = 0; i < 1200; i++)
             {
-
-                int[] costAtDepth = search();
-                
+                int[] costAtDepth = new int[] { -1, -1 };
+                while(costAtDepth[0] == -1)
+                {
+                    costAtDepth = search();
+                }
                 if (tracker.Any(track => track[0] == costAtDepth[0]))
                 {
                     int[] current = tracker.FirstOrDefault(track => track[0] == costAtDepth[0]);
@@ -53,7 +55,7 @@ namespace AStar
 
             HashSet<Node> visited = new HashSet<Node>();
             visited.Add(state);
-            while (frontier.getFrontier().Count() != 0)
+            while (frontier.getFrontier().Count() != 0 && visited.Count() < 500)
             {
                 Node next = frontier.getFrontier().Dequeue();
                 if (visited.Any(n => Enumerable.SequenceEqual(n.getBoard().getBoard(), next.getBoard().getBoard()) && n.getCost() == next.getCost()))
