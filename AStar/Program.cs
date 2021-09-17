@@ -1,7 +1,9 @@
 ﻿using AStar.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AStar
 {
@@ -9,7 +11,7 @@ namespace AStar
     {
         private static HashSet<Node> initialStates = new HashSet<Node>();
 
-        public static void Main()
+        public static async Task Main()
         {
             /*int[] costAtDepth = search();
             Console.WriteLine("Depth: " + costAtDepth[0] + " Cost: " + costAtDepth[1]);*/
@@ -35,10 +37,13 @@ namespace AStar
                 }
                 Console.WriteLine("\n{0}", i);
             }
+            List<String> data = new List<String>();
             foreach (int[] track in tracker)
             {
-                Console.WriteLine("depth:" + track[0] + "average" + (1.0 * track[2]) / (1.0 * track[1]));
+                data.Add("depth: " + track[0] + "average: " + (1.0 * track[2]) / (1.0 * track[1]));
             }
+
+            await File.WriteAllLinesAsync("Data.txt", data);
         }
 
 
