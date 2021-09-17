@@ -26,15 +26,6 @@ namespace AStar.Models
             return board;
         }
 
-        /*private static void copyBoard(List<int> boardToCopy)
-        {
-            for (int i = 0; i < 9; i++) 
-            {
-                boardToCopy.Add(board[i]);
-            }
-
-        }*/
-
         public Board[] makeAllMoves()
         {
             int blankLoc = findBlank();
@@ -123,10 +114,16 @@ namespace AStar.Models
         private int getInvCount()
         {
             int inv_count = 0;
-            for (int i = 0; i < 3 - 1; i++)
-                for (int j = i + 1; j < 3; j++)
-                    if (board[j * 3 + i] > 0 && board[j * 3 + i] > board[i * 3 + i])
+            for(int i = 0; i < 9; i++)
+            {
+               for(int j = i+1; j < 9; j++)
+                {
+                    if(board[i] > 0 && board[j] < board[i])
+                    {
                         inv_count++;
+                    }
+                }
+            }
             return inv_count;
         }
     }

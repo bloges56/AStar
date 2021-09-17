@@ -10,14 +10,16 @@ namespace AStar
         private static HashSet<Node> initialStates = new HashSet<Node>();
 
         public static void Main()
-        {  
+        {
+            /*int[] costAtDepth = search();
+            Console.WriteLine("Depth: " + costAtDepth[0] + " Cost: " + costAtDepth[1]);*/
             HashSet<int[]> tracker = new HashSet<int[]>();
-            
 
-            for(int i = 0; i < 100; i++)
+
+            for (int i = 0; i < 100; i++)
             {
                 int[] costAtDepth = new int[] { -1, -1 };
-                while(costAtDepth[0] == -1)
+                while (costAtDepth[0] == -1)
                 {
                     costAtDepth = search();
                 }
@@ -33,9 +35,9 @@ namespace AStar
                 }
                 Console.WriteLine("\n{0}", i);
             }
-            foreach(int[] track in tracker)
+            foreach (int[] track in tracker)
             {
-                Console.WriteLine("depth:" + track[0] + "average" + (1.0 * track[2])/(1.0 * track[1]));
+                Console.WriteLine("depth:" + track[0] + "average" + (1.0 * track[2]) / (1.0 * track[1]));
             }
         }
 
@@ -43,6 +45,9 @@ namespace AStar
 
         private static int[] search()
         {
+           /* Board initalBoard = new Board(new int[9] { 0, 1, 2, 3, 5, 4, 7, 6, 8 });
+            int invCount = initalBoard.getInvCount();*/
+
             Node state = new Node();
             if(initialStates.Any(n => Enumerable.SequenceEqual(n.getBoard().getBoard(), state.getBoard().getBoard())))
             {
