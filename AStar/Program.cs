@@ -73,7 +73,7 @@ namespace AStar
             while (frontier.getFrontier().Count() != 0)
             {
                 Node next = frontier.getFrontier().Dequeue();
-                if (visited.Any(n => Enumerable.SequenceEqual(n.getBoard().getBoard(), next.getBoard().getBoard()) && n.getCost() == next.getCost()))
+                if (visited.Any(n => Enumerable.SequenceEqual(n.getBoard().getBoard(), next.getBoard().getBoard()) /*&& n.getCost() <= next.getCost()*/))
                 {
                     continue;
                 }
